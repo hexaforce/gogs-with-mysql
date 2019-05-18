@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  mysql-server:
+    image: mysql/mysql-server
+    container_name: mysql-server
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: gogs
+      MYSQL_ROOT_PASSWORD: gogs
+      MYSQL_USER: gogs
+      MYSQL_PASSWORD: gogs
+
+  gogs:
+    image: gogs/gogs
+    container_name: gogs-server
+    ports:
+      - "3000:3000"
+      - "3022:22"
+    volumes:
+      # mkddir -p /data/git/gogs-repositories
+      - /var/lib/gogs/data:/data/git/gogs-repositories
+      # mkddir -p /app/gogs/log
+      - /var/lib/gogs/log:/app/gogs/log
+    depends_on:
+      - mysql-server
