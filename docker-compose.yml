@@ -15,6 +15,15 @@ services:
       MYSQL_USER: gogs
       MYSQL_PASSWORD: gogs
 
+  postfix-server:
+    image: catatnight/postfix
+    container_name: postfix-server
+    ports:
+      - "25:25"
+    environment:
+      maildomain: example.com
+      smtp_user: gogs:gogs
+
   gogs:
     image: gogs/gogs
     container_name: gogs-server
@@ -28,3 +37,4 @@ services:
       - /var/lib/gogs/log:/app/gogs/log
     depends_on:
       - mysql-server
+      - postfix-server
